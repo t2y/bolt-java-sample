@@ -1,0 +1,27 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.slack.api:bolt:1.1.+")
+    implementation("com.slack.api:bolt-servlet:1.1.+")
+    implementation("com.slack.api:bolt-jetty:1.1.+")
+
+    // misc
+    implementation 'com.google.guava:guava:31.0.1-jre'
+
+    // testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+application {
+    mainClass = 'java.bolt.sample.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
