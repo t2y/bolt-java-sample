@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 repositories {
@@ -7,21 +8,41 @@ repositories {
 }
 
 dependencies {
-    implementation("com.slack.api:bolt:1.1.+")
-    implementation("com.slack.api:bolt-servlet:1.1.+")
-    implementation("com.slack.api:bolt-jetty:1.1.+")
+    implementation("com.slack.api:bolt:1.25.1")
+    implementation("com.slack.api:bolt-servlet:1.25.1")
+    implementation("com.slack.api:bolt-jetty:1.25.1")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
 
     // misc
     implementation 'com.google.guava:guava:31.0.1-jre'
+}
 
-    // testing
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+testing {
+    suites {
+        test {
+            useJUnitJupiter('5.8.2')
+        }
+    }
+}
+
+testlogger {
+    showStandardStreams true
+    showStackTraces true
+    showPassed true
+    showSkipped true
+    showFailed true
+    showOnlySlow false
+    logLevel 'lifecycle'
 }
 
 application {
-    mainClass = 'java.bolt.sample.App'
+    mainClass = 'tutorial.bolt.sample.MyApp'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+run {
+    systemProperty "org.slf4j.simpleLogger.log.com.slack.api", System.getProperty("slackLogLevel")
 }
