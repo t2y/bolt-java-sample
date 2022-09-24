@@ -1,5 +1,6 @@
 plugins {
-    id 'application'
+    id 'java'
+    id 'io.quarkus'
     id 'com.adarshr.test-logger' version '3.2.0'
 }
 
@@ -8,10 +9,16 @@ repositories {
 }
 
 dependencies {
-    implementation("com.slack.api:bolt:1.25.1")
-    implementation("com.slack.api:bolt-servlet:1.25.1")
-    implementation("com.slack.api:bolt-jetty:1.25.1")
-    implementation("org.slf4j:slf4j-simple:1.7.36")
+    // slack
+    implementation 'com.slack.api:bolt-servlet:1.25.1'
+
+    // app
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-config-yaml'
+    implementation 'io.quarkus:quarkus-undertow'
+
+    // logging
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
 
     // misc
     implementation 'com.google.guava:guava:31.0.1-jre'
@@ -35,14 +42,20 @@ testlogger {
     logLevel 'lifecycle'
 }
 
-application {
-    mainClass = 'tutorial.bolt.sample.MyApp'
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-run {
-    systemProperty "org.slf4j.simpleLogger.log.com.slack.api", System.getProperty("slackLogLevel")
 }

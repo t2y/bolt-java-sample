@@ -1,0 +1,12 @@
+quarkus:
+  http:
+    port: 3000
+  log:
+    level: INFO
+    category:
+      "com.slack.api":
+        level: DEBUG
+      "tutorial.bolt.sample":
+        level: DEBUG
+  package:
+    type: uber-jar
